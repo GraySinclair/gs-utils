@@ -2,7 +2,7 @@ from __future__ import annotations
 import json
 from .runtime import require_fabric
 
-def nb_exit(*, status: str = "failure", msg: str = "", extras: dict | None = None) -> None:
+def nb_out(*, status: str = "failure", msg: str = "", extras: dict | None = None) -> None:
     """Exit the Fabric notebook with a structured JSON payload for pipelines."""
     require_fabric("nb_exit requires Fabric notebooks.")
     import notebookutils  # type: ignore
