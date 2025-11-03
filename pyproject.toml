@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "gs-utils"
 version = "0.2.8"
-description = "Fabric helpers with one-call setup() bootstrap"
+description = "Fabric notebook helpers."
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
