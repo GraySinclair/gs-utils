@@ -16,11 +16,9 @@ dependencies = []
 test = ["pytest>=8.0"]
 
 [tool.hatch.build.targets.wheel]
-# Map package name -> source dir
-packages = { "gs_utils" = "src/gs_utils" }
+packages = ["src/gs_utils"]
 
 [tool.hatch.build]
-# Include non-Python files in both sdist & wheel
 include = [
   "src/gs_utils/py.typed",
   "src/gs_utils/__init__.pyi",
