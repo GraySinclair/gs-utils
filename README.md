@@ -1,36 +1,67 @@
-# gs-utils
+# Overview:
+Name: 
+    gs_utils\
+Description: 
+    Microsoft Fabric notebook helpers with **runtime validation**.
 
-Helpers for Microsoft Fabric notebooks with **runtime validation** and a single-call **`setup()`** to bootstrap logging, Spark, and Key Vault secrets.
 
 ## Quick start (inside a Fabric notebook)
-
+### Download & Install Wheel Directly From Github
 ```python
-%pip install --upgrade build
+from pathlib import Path
+import requests
 
-import os, subprocess, sys
-os.chdir("/lakehouse/default/Files/dev/gs-utils")  # adjust
+# Direct link to the wheel asset(adjust versioning)
+url = "https://github.com/GraySinclair/gs-utils/releases/download/v0.2.5/gs_utils-0.2.5-py3-none-any.whl"
 
-subprocess.run([sys.executable, "-m", "build", "--wheel"], check=True)
-%pip install ./dist/gs_utils-0.2.0-py3-none-any.whl --force-reinstall
+# Target directory inside the Lakehouse Files mount
+dest_dir = Path("/lakehouse/default/Files/pkg")
+dest_dir.mkdir(parents=True, exist_ok=True)
 
-from gs_utils import setup, nb_exit, get_secret
+# Final destination path
+dest_path = dest_dir / Path(url).name
 
-ctx = setup(
-    logger_name="nb.gs",
-    log_level="INFO",
-    kv_url="https://<kv>.vault.azure.net/",
-    secret_names=["INTACCT_SENDERID", "INTACCT_CLIENT_ID"],
-    require_spark=False,   # set True if your code assumes Spark
-)
+# Stream download (follows redirects and saves binary data)
+headers = {"Accept": "application/octet-stream"}
+with requests.get(url, headers=headers, stream=True, allow_redirects=True, timeout=60) as r:
+    r.raise_for_status()
+    with dest_path.open("wb") as f:
+        for chunk in r.iter_content(chunk_size=8192):
+            if chunk:
+                f.write(chunk)
 
-ctx.logger.info("All set", extra={"secrets_loaded": list(ctx.secrets)})
-# nb_exit(status="success", msg="Ready", extras={"rows_written": 123})
+print(f"Downloaded wheel to: {dest_path}")
+
+# Optional: install the wheel immediately
+import sys, subprocess
+subprocess.check_call([sys.executable, "-m", "pip", "install", str(dest_path), "--upgrade"])
+```
+## API Functions & Usage:
+### Import statement:
+```python
+import gs_utils as gs
 ```
 
-## What `setup()` does
+### Bootstrapped Logger Setup With `_configure_logger()`:
+ - Timezone converted from server to local time. -ZoneInfo("America/Chicago")
+ - Stream flush logs as they record instead of on cell completion.(Still logs in cases where raised exceptions prevent buffered logs from being flushed.)
+```python
+logger = gs._configure_logger(name="nb.nbname", level="info")
+logger.info("Notebook starting up...")
+```
 
-- Validates Fabric runtime (lazy import of `notebookutils`).
-- Configures a structured console logger.
-- Optionally fetches a list of AKV secrets via `notebookutils.credentials.getSecret`.
-- Optionally ensures a Spark session handle is returned (does not auto-create a new session).
-- Returns a frozen dataclass `SetupContext` with handy attributes.
+### Access Azure Key Vault Secrets With `get_secret()`:
+```python
+akv_url = "https://<yourvault>.vault.azure.net/"
+token = gs.get_secret(vault_url=akv_url, name="your_secret")
+```
+
+### Standardize Parameter Access In Pipeline Post-Notebook Run With `nb_out()`:
+```python
+out_details = {
+    "rows_written": 1532,
+    "other_parameter": "lorem ipsum"
+    }
+# Gracefully exits notebook. Automatic passing of any included parameters.
+gs.nb_out(status="success", msg="ETL Completed", extras=out_details) 
+```
