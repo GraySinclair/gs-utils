@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gs-utils"
+version = "0.2.0"
+description = "Fabric helpers with one-call setup() bootstrap"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Gray Sinclair"}]
+# Intentionally empty; Fabric injects notebookutils at runtime
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=8.0"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gs_utils"]
