@@ -34,7 +34,7 @@ def nb_out(*, status: str, msg: str, extras: dict | None = None) -> None:
     """
     ...
 
-def config_logger(name: str, level: str | int = logging.INFO) -> logging.Logger: 
+def config_logger(name: str, level: int | str = ...) -> Logger:
     """
     Return configured logger.
     
