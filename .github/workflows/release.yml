@@ -13,14 +13,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
-        with: { python-version: "3.11" }
+        with:
+          python-version: "3.11"
 
       - name: Build wheel and sdist
         run: |
           python -m pip install --upgrade pip
           pip install build
           python -m build
+          ls -la dist
+
+      # 🔹 Create a stable alias for 'latest'
+      - name: Create stable alias for latest
+        run: |
+          WHEEL="$(ls dist/gs_utils-*-py3-none-any.whl | head -n1)"
+          if [ -f "$WHEEL" ]; then
+            cp "$WHEEL" dist/gs_utils-latest.whl
+            echo "Created alias: dist/gs_utils-latest.whl"
+          else
+            echo "No wheel found in dist/"
+            exit 1
+          fi
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
