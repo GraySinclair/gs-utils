@@ -4,20 +4,24 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gs-utils"
-version = "0.2.6"
+version = "0.2.7"
 description = "Fabric helpers with one-call setup() bootstrap"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [{name = "Gray Sinclair"}]
-# Intentionally empty; Fabric injects notebookutils at runtime
 dependencies = []
 
 [project.optional-dependencies]
 test = ["pytest>=8.0"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/gs_utils"]
+# Map package name -> source dir
+packages = { "gs_utils" = "src/gs_utils" }
 
-[tool.setuptools.package-data]
-"gs_utils" = ["py.typed"]
+[tool.hatch.build]
+# Include non-Python files in both sdist & wheel
+include = [
+  "src/gs_utils/py.typed",
+  "src/gs_utils/__init__.pyi",
+]
