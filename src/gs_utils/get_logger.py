@@ -14,13 +14,16 @@ class FlushStreamHandler(logging.StreamHandler):
         super().emit(record)
         self.flush()
 
-def config_logger(name: str, level: str | int = logging.INFO) -> logging.Logger:
+def config_logger(name: str, level: str = "INFO") -> logging.Logger:
     """
-    Return configured logger.
-    
+    Return a logger configured with a Central-Time formatter and auto-flushing handler.
+
     Args:
         name:  Logger name.
-        level: Log level, either string (e.g. "DEBUG") or numeric constant.
+        level: Log level (string like "DEBUG" or numeric constant).
+
+    Returns:
+        A ready-to-use `logging.Logger` instance scoped to *name*.
     """
     # Resolve string levels like "debug" -> logging.DEBUG
     if isinstance(level, str):
@@ -36,3 +39,4 @@ def config_logger(name: str, level: str | int = logging.INFO) -> logging.Logger:
 
     logger.propagate = False
     return logger
+
