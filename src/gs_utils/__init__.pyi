@@ -27,7 +27,7 @@ def nb_out(*, status: str, msg: str, extras: dict | None = None) -> None:
         gs.nb_out(
                 status="success",
                 msg="ETL complete",
-                extras={"rows_written": 1523, "duration_s": 18.4},
+                extras={"rows_written": 1523, "duration_s": 18.4}
             )
         ```
     """
