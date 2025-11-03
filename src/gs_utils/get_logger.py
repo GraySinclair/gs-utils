@@ -14,7 +14,7 @@ class FlushStreamHandler(logging.StreamHandler):
         super().emit(record)
         self.flush()
 
-def _configure_logger(name: str, level: str | int = logging.INFO) -> logging.Logger:
+def config_logger(name: str, level: str | int = logging.INFO) -> logging.Logger:
     """
     Return configured logger.
     
