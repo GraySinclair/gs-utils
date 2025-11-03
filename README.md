@@ -46,7 +46,7 @@ import gs_utils as gs
  - Timezone converted from server to local time. -ZoneInfo("America/Chicago")
  - Stream flush logs as they record instead of on cell completion.(Still logs in cases where raised exceptions prevent buffered logs from being flushed.)
 ```python
-logger = gs._configure_logger(name="nb.nbname", level="info")
+logger = gs.config_logger(name="nb.nbname", level="info")
 logger.info("Notebook starting up...")
 ```
 
