@@ -18,8 +18,7 @@ def nb_out(*, status: str, msg: str, extras: dict | None = None) -> None:
     Args:
         status: Short status keyword such as "success", "failure", or "default".
         msg: Human-readable message describing the outcome or context.
-        extras: Optional dictionary of additional key-value pairs to include
-            at the top level of the JSON payload.
+        extras: Optional dictionary of additional key-value pairs to include at the top level of the JSON payload.
     
     Example:
         ```python
