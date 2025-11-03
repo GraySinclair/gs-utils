@@ -11,7 +11,7 @@ def get_secret(vault_url: str, secret_name: str) -> str:
     """
     ...
 
-def nb_out(*, status: str, msg: str, extras: dict | None = None) -> None:
+def nb_out(*, status: str, msg: str, extras: dict | None = ...) -> None:
     """
     Exit the Fabric notebook with a structured JSON payload for pipelines.
 
@@ -34,12 +34,15 @@ def nb_out(*, status: str, msg: str, extras: dict | None = None) -> None:
     ...
 
 from logging import Logger
-def config_logger(name: str, level: int | str = ...) -> Logger:
+def config_logger(name: str, level: str = ...) -> Logger:
     """
-    Return configured logger.
-    
+    Return a logger configured with a Central-Time formatter and auto-flushing handler.
+
     Args:
         name:  Logger name.
-        level: Log level, either string (e.g. "DEBUG") or numeric constant.
+        level: Log level (string like "DEBUG" or numeric constant).
+
+    Returns:
+        A ready-to-use `logging.Logger` instance scoped to *name*.
     """
     ...
