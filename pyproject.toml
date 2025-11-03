@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gs-utils"
-version = "0.2.5"
+version = "0.2.6"
 description = "Fabric helpers with one-call setup() bootstrap"
 readme = "README.md"
 requires-python = ">=3.10"
