@@ -31,6 +31,7 @@ def nb_out(*, status: str, msg: str , extras: dict | None = None) -> None:
         payload.update(extras)
     log.debug(payload)
     
-    notebookutils.notebook.exit(json.dumps(payload, ensure_ascii=False))
+    # notebookutils.notebook.exit(json.dumps(payload, ensure_ascii=False))
+    notebookutils.notebook.exit(payload)
 
 __all__ = ["nb_out", "get_logger"]
