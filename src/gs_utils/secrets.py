@@ -1,4 +1,7 @@
 from __future__ import annotations
+from .fail_utils import nb_out, get_logger
+
+log = get_logger(name="nb.secrets",level="INFO")
 
 def get_secret(vault_url: str, secret_name: str) -> str:
     """
@@ -12,7 +15,13 @@ def get_secret(vault_url: str, secret_name: str) -> str:
         The secret value as a string.
     """
     import notebookutils  # type: ignore
-    value = notebookutils.credentials.getSecret(vault_url, name)
-    if not value:
-        raise RuntimeError(f"Secret '{name}' not found or empty at '{vault_url}'.")
+    try:
+        value = notebookutils.credentials.getSecret(vault_url, secret_name)
+        log.info(f"Secret '{secret_name}' returned from vault.")
+    except:
+        _msg = f"Secret '{secret_name}' not found or empty at '{vault_url}'."
+        log.critical(_msg)
+        nb_out(status="failed", msg=_msg)
     return value
+
+__all__ = ["get_secret", "nb_out", "get_logger"]

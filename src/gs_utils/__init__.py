@@ -8,10 +8,9 @@ This package provides:
 from importlib.metadata import version, PackageNotFoundError
 try:
     __version__ = version("gs-utils")
-except PackageNotFoundError:  # e.g., editable install without metadata
+except PackageNotFoundError:
     __version__ = "0.0.0"
 
-from .secrets import get_secret
-from .exit_nb import nb_out
-from .get_logger import config_logger
-__all__ = ["get_secret", "nb_out", "config_logger"]
+from .secrets import get_secret, nb_out, get_logger
+
+__all__ = ["get_secret", "nb_out", "get_logger"]
