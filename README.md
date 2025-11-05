@@ -2,33 +2,29 @@
 ### Download & Install Latest .whl Directly From Github
 ```python
 from pathlib import Path
-import fnmatch
 import requests
 
 # --- config ---
 repo = "GraySinclair/gs-utils"
-wheel_pattern = "gs_utils-*-py3-none-any.whl"
 dest_dir = Path("/lakehouse/default/Files/pkg") # or wherever you want to save it
-timeout = (10, 120)
 
 # --- resolve latest wheel URL ---
 api_url = f"https://api.github.com/repos/{repo}/releases/latest"
-resp = requests.get(api_url, headers={"Accept": "application/vnd.github+json"}, timeout=timeout)
+resp = requests.get(api_url, headers={"Accept": "application/vnd.github+json"}, timeout=(10, 120))
 resp.raise_for_status()
 release = resp.json()
 
 assets = release.get("assets", [])
-asset = next((a for a in assets if fnmatch.fnmatch(a.get("name", ""), wheel_pattern)), None)
+asset = next((a for a in assets if a.get("name", "").endswith(".whl")), None)
 if not asset:
-    raise RuntimeError(f"No asset matching '{wheel_pattern}' found in latest release of {repo}.")
+    raise RuntimeError(f"No wheel asset found in latest release of {repo}.")
 
 url = asset["browser_download_url"]
 filename = asset["name"]
 
 # --- download atomically ---
-dest_dir.mkdir(parents=True, exist_ok=True)
-dest_path = dest_dir / filename
-tmp_path = dest_path.with_suffix(dest_path.suffix + ".part")
+dest_dir.mkdir(parents=True, exist_ok=True) # creates the directory if missing
+tmp_path = (dest_dir / filename).with_suffix(".part")
 
 with requests.get(url, stream=True, allow_redirects=True, timeout=timeout) as r:
     r.raise_for_status()
@@ -40,6 +36,7 @@ with requests.get(url, stream=True, allow_redirects=True, timeout=timeout) as r:
 tmp_path.replace(dest_path)
 print(f"Downloaded wheel to: {dest_path}")
 ```
+- Ensure you copy the link from the wheel in your lakehouse files prior to running the below
 ```python
 %pip install /lakehouse/default/Files/pkg/gs_utils-0.3.2-py3-none-any.whl
 ```
