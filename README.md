@@ -37,6 +37,14 @@ tmp_path.replace(dest_path)
 print(f"Downloaded wheel to: {dest_path}")
 ```
 - Ensure you copy the link from the wheel in your lakehouse files prior to running the below
+### Install via PIP(In-line) 
+- This only works in interactive runs for testing.
+- For production/automated pipeline runs:
+    - Create an 'environment' item in the workspace. 
+    - Add this .whl to the custom libraries tab. 
+    - Ensure the environment is in published status.
+    - Attach env to the notebook: At the top of your notebook--
+    -     Home Tab > Environment > Change Environment
 ```python
 %pip install /lakehouse/default/Files/pkg/gs_utils-0.3.2-py3-none-any.whl
 ```
