@@ -10,7 +10,7 @@ dest_dir = Path("/lakehouse/default/Files/pkg") # or wherever you want to save i
 
 # --- resolve latest wheel URL ---
 api_url = f"https://api.github.com/repos/{repo}/releases/latest"
-resp = requests.get(api_url, headers={"Accept": "application/vnd.github+json"}, timeout=(10, 120))
+resp = requests.get(api_url, headers={"Accept": "application/vnd.github+json"})
 resp.raise_for_status()
 release = resp.json()
 
@@ -26,15 +26,16 @@ filename = asset["name"]
 dest_dir.mkdir(parents=True, exist_ok=True) # creates the directory if missing
 tmp_path = (dest_dir / filename).with_suffix(".part")
 
-with requests.get(url, stream=True, allow_redirects=True, timeout=timeout) as r:
+with requests.get(url, stream=True, allow_redirects=True) as r:
     r.raise_for_status()
     with tmp_path.open("wb") as f:
         for chunk in r.iter_content(chunk_size=1024 * 1024):
             if chunk:
                 f.write(chunk)
 
-tmp_path.replace(dest_path)
-print(f"Downloaded wheel to: {dest_path}")
+final_path = dest_dir / filename
+tmp_path.replace(final_path)
+print(f"Downloaded wheel to: {final_path}")
 ```
 - Ensure you copy the link from the wheel in your lakehouse files prior to running the below
 ### Install via PIP(In-line) 
