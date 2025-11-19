@@ -11,6 +11,7 @@ def load_cfg(path: str, maxbytes: int = 102400) -> dict:
         Parsed JSON as a Python dict.
     """
     import notebookutils # type: ignore
+    import json # type: ignore
     raw = notebookutils.fs.head(path, max_bytes=maxbytes)
     return json.loads(raw)
 
