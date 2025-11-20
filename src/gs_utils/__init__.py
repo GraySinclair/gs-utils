@@ -14,6 +14,6 @@ except PackageNotFoundError:
     __version__ = "0.0.0"
 
 from .secrets import get_secret, nb_out, get_logger
-from .shortcuts import is_automated_run, load_cfg
+from .shortcuts import is_automated_run, load_cfg, get_enabled_tables
 
-__all__ = ["get_secret", "nb_out", "get_logger", "is_automated_run", "load_cfg"]
+__all__ = ["get_secret", "nb_out", "get_logger", "is_automated_run", "load_cfg", "get_enabled_tables"]
