@@ -15,7 +15,21 @@ def load_cfg(path: str, maxbytes: int = 102400) -> dict:
     raw = notebookutils.fs.head(path, max_bytes=maxbytes)
     return json.loads(raw)
 
+
 def is_automated_run() -> bool:
     """Return True if executed from a pipeline activity."""
     import notebookutils  # type: ignore
     return notebookutils.runtime.context.get("isForPipeline")
+
+
+def get_enabled_tables(controls) -> list:
+    """
+    Return 'table_name' from a where 'is_enabled' is truthy.
+
+    control_panel = [
+            {"table_name": "staff",     "is_enabled": True},
+            {"table_name": "invoice",   "is_enabled": False},
+            ]
+    """
+    return [row["table_name"] for row in switches if row.get("is_enabled")]
+    
