@@ -31,5 +31,5 @@ def get_enabled_tables(controls) -> list:
             {"table_name": "invoice",   "is_enabled": False},
             ]
     """
-    return [row["table_name"] for row in switches if row.get("is_enabled")]
+    return [row["table_name"] for row in controls if row.get("is_enabled")]
     
