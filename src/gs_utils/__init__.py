@@ -17,7 +17,7 @@ except PackageNotFoundError:
 
 from .secrets import get_secret, nb_out, get_logger
 from .shortcuts import is_automated_run, load_cfg, get_enabled_tables
-from .get_monthly_data import month_to_gte_lt
+from .unique_ident import unique_file_name
 
 
-__all__ = ["get_secret", "nb_out", "get_logger", "is_automated_run", "load_cfg", "get_enabled_tables", "month_to_gte_lt"]
+__all__ = ["get_secret", "nb_out", "get_logger", "is_automated_run", "load_cfg", "get_enabled_tables", "unique_file_name"]
